@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <title>To Do List</title>
+</head>
+
+<body>
+
+    <% if (message != "") {%>
+        <section class="message message-<%= type %>">
+            <p><%= message %></p>
+            <span id="close-message"><i class="bi bi-x"></i></span>
+        </section>
+        <% } %>
+
+    <header>
+
+        <% if (task==null) { %>
+            <h1>TO DO LIST</h1>
+            <form action="/create" method="post">
+                <input type="text" name="name" id="name" placeholder="Insira o nome da tarefa">
+                <input type="text" name="description" placeholder="Adicione uma descrição à tarefa">
+                <input type="text" name="category" placeholder="Adicione uma categoria à tarefa">
+                <button id="addButton" type="submit">Adicionar</button>
+            </form>
+        <% } else { %>
+            <h1>EDITAR TAREFA</h1>
+            <form action="/updateOne/<%= task._id %>" method="post">
+                <input type="text" name="name" id="name" value="<%= task.name %>">
+            </form>
+            <form action="/updateOne/<%= task._id %>" method="post">
+                <input type="text" name="description" value="<%= task.description %>">
+            </form>
+            <form action="/updateOne/<%= task._id %>" method="post">
+                <input type="text" name="category" value="<%= task.category %>">
+            </form>
+            <buttom id="updateButtom" type="submit">Atualizar</buttom>
+        <% } %>
+
+    </header>
+
+    <section id="tasks">
+        <ul>
+            <% tasksList.forEach((task)=> { %>
+                <li class="check-<%= task.check %>">
+                    <div>
+                        <a href="/check/<%= task._id %>" class="check-<%= task.check %>">
+                            <%= task.name %><br>
+                            <%= task.description %><br>
+                            <%= task.category %>
+                        </a>                    
+                        <span>Criado em <%= task.date.toLocaleDateString('pt-BR') %></span>
+                    </div>
+                    <div>
+                        <a class="btnUpdate" href="/getById/<%= task.id %>/update"><i class="bi bi-pencil-square"></i></a>
+                        <a class="btnDelete" href="/getById/<%= task.id %>/delete"><i class="bi bi-trash"></i></a>
+                    </div>
+                </li>
+            <% }) %>
+        </ul>
+    </section>
+
+    <% if (taskDelete !=null) { %>
+        <section id="modal">
+            <div id="card">
+
+                <div id="head">
+                    <h2>Confirmação</h2>
+                    <a id="close" href="/"><i class="bi bi-x"></i></a>
+                </div>
+                
+                <hr>
+                <p>Deseja realmente apagar a tarefa: <%= taskDelete.task %>? </p>
+                <div id="btns">
+                    <a id="btnNot" href="/">Não</a>
+                    <a id="btnYes" href="/deleteOne/<%= taskDelete._id %>">Sim</a>
+                </div>
+            </div>
+        </section>
+        <% } %>
+
+            <script src="script.js"></script>
+</body>
+
+</html>
