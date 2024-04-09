@@ -7,7 +7,7 @@ const cors = require('cors');
 
 connectToDb();
 const app = express();
-const port = process.env.PORT;
+const port = 3000;
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
